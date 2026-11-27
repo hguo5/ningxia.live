@@ -6,7 +6,7 @@ interface Props {
   text: string;
 }
 
-const NAMES = ['GoLive Musician’s League', 'GoLive 音乐人联盟'];
+const NAMES = ['GoLive Musician\'s League', 'GoLive 音乐人联盟'];
 const pattern = new RegExp(`(${NAMES.map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
 const parts = Astro.props.text.split(pattern);
 ---

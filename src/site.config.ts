@@ -18,9 +18,9 @@ export const site = {
     ],
   },
 
-  // 柠下乐会 is a brand of GoLive Musician’s League.
+  // 柠下乐会 is a brand of GoLive Musician's League.
   golive: {
-    name: "GoLive Musician’s League",
+    name: "GoLive Musician's League",
     nameZh: 'GoLive 音乐人联盟',
     url: 'https://golive.music/',
     aboutUrl: 'https://golive.music/about',
