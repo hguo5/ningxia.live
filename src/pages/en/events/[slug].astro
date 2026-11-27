@@ -1,0 +1,19 @@
+---
+import EventPage from '../../../components/EventPage.astro';
+import { events, type SiteEvent } from '../../../lib/events';
+
+export function getStaticPaths() {
+  // events are sorted newest first
+  return events.map((e, i) => ({
+    params: { slug: e.slug },
+    props: { event: e, newer: events[i - 1] ?? null, older: events[i + 1] ?? null },
+  }));
+}
+
+interface Props {
+  event: SiteEvent;
+  newer: SiteEvent | null;
+  older: SiteEvent | null;
+}
+---
+<EventPage lang="en" {...Astro.props} />

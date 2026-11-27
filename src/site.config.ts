@@ -6,10 +6,13 @@ export const site = {
 
   organizer: {
     name: '郭辉 Hui Guo',
-    bio: '白天是 Quora 的机器学习工程师，周末是柠下乐会的主理人。',
+    bio: {
+      zh: '白天是 Quora 的机器学习工程师，周末是柠下乐会的主理人。',
+      en: 'Machine learning engineer at Quora by day, host of ULTimeet on weekends.',
+    },
     photo: null as string | null, // e.g. '/img/hui.jpg'
     links: [
-      { label: '个人主页', href: 'https://hguo5.github.io' },
+      { label: { zh: '个人主页', en: 'Personal site' }, href: 'https://hguo5.github.io' },
       // { label: 'LinkedIn', href: 'https://www.linkedin.com/in/...' },
     ],
   },

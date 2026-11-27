@@ -22,8 +22,13 @@ time: "19:00"           # optional, 24-hour, Bay Area time
 endTime: "22:00"        # optional
 title: 活动主题
 subtitle: English title # optional
-place: San Jose         # city only for private venues
+titleEn: English title  # optional; English page falls back to Chinese
+# place: leave out for backyard events (shows "San Jose · 柠檬树下的后院", never the address)
+place: Baylands Grove · Sunnyvale   # only for public venues
+placeEn: ...            # optional
 price: 免费              # optional
+priceEn: Free           # optional
+summaryEn: English description   # optional; the Markdown body below is the Chinese one
 signup: Eventbrite      # optional
 signupUrl: https://...  # optional
 cover: /img/events/10.jpg
@@ -47,6 +52,10 @@ performers: [演出者 · 歌曲, 开放麦 · 卡拉OK]
 ```
 
 For a landscape cover photo instead of a poster, add `coverShape: landscape`.
+
+## Languages
+
+Chinese is served at `/` and English at `/en/`. Interface text for both lives in `src/i18n.ts`.
 
 ## Site settings
 

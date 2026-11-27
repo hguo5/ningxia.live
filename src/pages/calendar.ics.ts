@@ -1,6 +1,6 @@
 // Subscribable calendar of all 柠下乐会 events: https://ningxia.live/calendar.ics
 import type { APIRoute } from 'astro';
-import { events } from '../lib/events';
+import { events, code } from '../lib/events';
 import { site } from '../site.config';
 import { abs } from '../lib/url';
 
@@ -58,8 +58,10 @@ export const GET: APIRoute = () => {
       const d = e.date.replace(/-/g, '');
       lines.push(`DTSTART;VALUE=DATE:${d}`);
     }
-    lines.push(`SUMMARY:${esc(`${e.code} ${e.title}`)}`);
-    if (e.place) lines.push(`LOCATION:${esc(e.place)}`);
+    const en = e.titleEn && e.titleEn !== e.title ? ` / ${e.titleEn}` : '';
+    lines.push(`SUMMARY:${esc(`${code(e.slug, 'zh')} ${e.title}${en}`)}`);
+    // Backyard events (no place given) show only the city.
+    lines.push(`LOCATION:${esc(e.place ?? 'San Jose')}`);
     lines.push(`URL:${url}`, `DESCRIPTION:${esc(url)}`, 'END:VEVENT');
   }
   lines.push('END:VCALENDAR');

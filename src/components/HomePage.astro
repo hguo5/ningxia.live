@@ -1,0 +1,265 @@
+---
+import { u, abs } from '../lib/url';
+import Base from '../layouts/Base.astro';
+import Cover from './Cover.astro';
+import { site } from '../site.config';
+import { events, upcoming, past, view, code } from '../lib/events';
+import { t as T, lp, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const s = T[lang];
+const ev = (slug: string) => lp(lang, `/events/${slug}/`);
+
+const next = upcoming[0];
+const nv = next && view(next, lang);
+const heroEvent = next ?? past[0];
+const hv = heroEvent && view(heroEvent, lang);
+const nextNum = String(events.length ? events[0].num + 1 : 1).padStart(2, '0');
+
+const calUrl = abs('/calendar.ics');
+const webcal = calUrl.replace(/^https?:/, 'webcal:');
+const calDisplay = calUrl.replace(/^https?:\/\//, '');
+const pastCount = site.showEarlyEventsNote ? past.length + 3 : past.length;
+---
+<Base lang={lang} path="/">
+  <!-- Hero -->
+  <section id="next" class="wrap hero">
+    <div class="hero-text">
+      <p class="eyebrow">{s.eyebrow}</p>
+      <h1 class="display">{s.h1[0]}<br />{s.h1[1]}</h1>
+      <p class="lead">{s.lead}</p>
+
+      {nv ? (
+        <div class="next-card">
+          <div class="next-info">
+            <span class="next-label">{s.nextLabel} · {nv.code}</span>
+            <span class="next-title">{nv.title}</span>
+            <span class="next-meta">{nv.date}{nv.time && ` ${nv.time}`} · {nv.place}</span>
+          </div>
+          <a class="btn btn-lemon" href={ev(next!.slug)}>{s.details}</a>
+        </div>
+      ) : (
+        <div class="next-card">
+          <div class="next-info">
+            <span class="next-label">{s.nextLabel} · {code(nextNum, lang)}</span>
+            <span class="next-title">{s.comingSoon}</span>
+            <span class="next-meta">{s.subscribeFirst}</span>
+          </div>
+          <a class="btn btn-lemon" href="#join">{s.getNotified}</a>
+        </div>
+      )}
+    </div>
+
+    {hv && (
+      <a class="hero-figure" href={ev(heroEvent.slug)}>
+        <Cover event={heroEvent} lang={lang} class="hero-cover" eager />
+        <span class="caption">{next ? s.nextLabel : s.lastLabel} · {hv.code} {hv.title} · {hv.dotDate}</span>
+      </a>
+    )}
+  </section>
+
+  <!-- Past events -->
+  <section id="past" class="past">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="display">{s.pastTitle}</h2>
+        <p>{s.pastCount(pastCount)}</p>
+      </div>
+      <ul class="grid">
+        {past.map((e) => {
+          const v = view(e, lang);
+          return (
+            <li>
+              <a href={ev(e.slug)} class="card">
+                <Cover event={e} lang={lang} />
+                <span class="card-code">{v.code} · {v.dotDate}</span>
+                <span class="card-title">{v.title}</span>
+                {v.subtitle && <span class="card-sub">{v.subtitle}</span>}
+                <span class="card-sub">{v.place}</span>
+                {e.photos && e.photos.length > 0 ? (
+                  <span class="strip">
+                    {e.photos.slice(0, 3).map((p) => <img src={u(p)} alt="" loading="lazy" />)}
+                  </span>
+                ) : (
+                  <span class="no-photos">{s.photosSoon}</span>
+                )}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      {site.showEarlyEventsNote && <p class="early">{s.earlyNote}</p>}
+    </div>
+  </section>
+
+  <!-- About the brand -->
+  <section id="about" class="wrap about">
+    <img src={u('/img/brand-poster.jpg')} alt={s.posterAlt} class="brand-poster" loading="lazy" />
+    <div class="about-text">
+      <p class="eyebrow">{s.aboutEyebrow}</p>
+      <h2 class="display">{s.tagline}</h2>
+      {s.aboutP.map((p) => <p>{p}</p>)}
+      <div class="actions">
+        <a class="btn btn-outline" href={site.golive.aboutUrl}>{s.aboutGoLive}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Organizer -->
+  <section class="wrap organizer">
+    {site.organizer.photo && <img src={u(site.organizer.photo)} alt={site.organizer.name} class="avatar" loading="lazy" />}
+    <div class="about-text">
+      <p class="eyebrow">{s.organizerEyebrow}</p>
+      <h2 class="name">{site.organizer.name}</h2>
+      <p>{site.organizer.bio[lang]}</p>
+      <div class="links">
+        {site.organizer.links.map((l) => <a href={u(l.href)}>{l.label[lang]} →</a>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Support -->
+  <section id="support" class="support">
+    <div class="wrap support-inner">
+      <div class="support-text">
+        <p class="eyebrow eyebrow-light">{s.supportEyebrow}</p>
+        <h2 class="display">{s.supportTitle}</h2>
+        <p>{s.supportP}</p>
+        <p class="tax">{s.taxNote}</p>
+      </div>
+      <div class="benevity">
+        <h3>{s.benevityTitle}</h3>
+        <ol>
+          <li>{s.steps[0]}</li>
+          <li>
+            {s.steps[1]}
+            <span class="copy-row">
+              <code id="golive-name">{site.golive.name}</code>
+              <button type="button" class="copy" data-copy="golive-name" data-done={s.copied}>{s.copy}</button>
+            </span>
+          </li>
+          <li>{s.steps[2]}</li>
+          <li>{s.steps[3]}</li>
+        </ol>
+        {site.golive.donateUrl && <a class="other" href={site.golive.donateUrl}>{s.otherWays}</a>}
+      </div>
+    </div>
+  </section>
+
+  <!-- Join -->
+  <section id="join" class="wrap">
+    <div class="join">
+      <div class="join-text">
+        <h2 class="display">{s.joinTitle}</h2>
+        <p>{s.joinP}{site.subscribe.wechatQr && ` ${s.joinWechat}`}</p>
+        <div class="actions">
+          <a class="btn btn-dark" href={webcal}>{s.subscribeCal}</a>
+          {site.subscribe.email && <a class="btn btn-white" href={u(site.subscribe.email)}>{s.emailAlerts}</a>}
+        </div>
+        <p class="small">{s.calSmall[0]} <a href={u('/calendar.ics')}>{s.calSmall[1]}</a>{s.calSmall[2]}{calDisplay}</p>
+      </div>
+      {site.subscribe.wechatQr && <img src={u(site.subscribe.wechatQr)} alt={s.wechatAlt} class="qr" />}
+    </div>
+  </section>
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('button.copy').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const text = document.getElementById(btn.dataset.copy!)?.textContent ?? '';
+      try {
+        await navigator.clipboard.writeText(text);
+        const original = btn.textContent;
+        btn.textContent = btn.dataset.done ?? original;
+        setTimeout(() => (btn.textContent = original), 1500);
+      } catch {
+        /* clipboard unavailable: the text is still visible to copy by hand */
+      }
+    });
+  });
+</script>
+
+<style>
+  .hero { display: flex; flex-wrap: wrap; gap: 56px; align-items: center; padding-top: 40px; padding-bottom: 72px; }
+  .hero-text { flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+  h1 { margin: 0; font-size: clamp(44px, 7vw, 76px); line-height: 1.1; color: var(--green); }
+  :global(html[lang='en']) h1 { font-size: clamp(40px, 6vw, 64px); }
+  .lead { margin: 0; font-size: 19px; line-height: 1.75; color: var(--muted); max-width: 540px; }
+  .next-card {
+    background: var(--paper); border: 2px solid var(--green); border-radius: 20px; padding: 24px 28px;
+    display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; max-width: 560px;
+  }
+  .next-info { display: flex; flex-direction: column; gap: 4px; }
+  .next-label { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; color: var(--orange); }
+  .next-title { font-size: 24px; font-weight: 900; }
+  .next-meta { font-size: 15px; color: var(--soft); }
+  .hero-figure { flex: 0 1 400px; display: flex; flex-direction: column; gap: 14px; align-items: center; text-decoration: none; color: var(--soft); font-size: 14px; text-align: center; }
+  .hero-figure :global(.hero-cover) { max-width: 400px; border-radius: 16px; box-shadow: 0 24px 48px rgba(31, 42, 28, 0.22); transform: rotate(2deg); transition: transform 0.3s; }
+  .hero-figure:hover :global(.hero-cover) { transform: rotate(0deg) scale(1.01); }
+
+  .past { background: var(--green); color: var(--ground); padding: 80px 0; }
+  .section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 40px; }
+  .section-head h2 { margin: 0; font-size: clamp(40px, 5vw, 52px); }
+  .section-head p { margin: 0; font-size: 17px; color: var(--green-tint); }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 32px 28px; }
+  .card { display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: var(--ground); }
+  .card :global(.cover) { margin-bottom: 8px; transition: transform 0.2s; }
+  .card:hover :global(.cover) { transform: translateY(-4px); }
+  .card:hover { color: var(--ground); }
+  .card-code { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; color: var(--lemon); }
+  .card-title { font-size: 20px; font-weight: 700; line-height: 1.35; }
+  .card-sub { font-size: 14px; color: var(--green-tint); }
+  .strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+  .strip img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; }
+  .no-photos {
+    margin-top: 8px; padding: 12px; border: 1px dashed rgba(216, 227, 207, 0.5); border-radius: 8px;
+    font-size: 13px; color: var(--green-tint); text-align: center;
+  }
+  .early { margin: 40px 0 0; font-size: 15px; color: var(--green-tint); }
+
+  .about, .organizer { display: flex; flex-wrap: wrap; gap: 56px; align-items: center; }
+  .about { padding-top: 88px; }
+  .organizer { padding-top: 72px; padding-bottom: 88px; }
+  .brand-poster { flex: 0 1 360px; width: 360px; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 16px; box-shadow: 0 16px 36px rgba(31, 42, 28, 0.18); }
+  .avatar { flex: 0 0 200px; width: 200px; height: 200px; border-radius: 50%; object-fit: cover; }
+  .about-text { flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+  .about-text h2.display { margin: 0; font-size: clamp(36px, 5vw, 48px); color: var(--green); }
+  .about-text p:not(.eyebrow) { margin: 0; font-size: 18px; line-height: 1.8; color: var(--muted); }
+  .name { margin: 0; font-size: 36px; font-weight: 900; }
+  .links { display: flex; flex-wrap: wrap; gap: 20px; font-weight: 500; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+
+  .support { background: var(--green); color: var(--ground); padding: 80px 0; margin-bottom: 72px; }
+  .support-inner { display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start; }
+  .support-text { flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+  .eyebrow-light { color: var(--lemon); }
+  .support h2 { margin: 0; font-size: clamp(34px, 4.5vw, 46px); }
+  .support-text p:not(.eyebrow) { margin: 0; font-size: 18px; line-height: 1.8; color: var(--green-tint); }
+  .support-text p.tax { font-size: 14px; }
+  .benevity { flex: 1 1 400px; min-width: 0; background: var(--paper); color: var(--ink); border-radius: 20px; padding: 32px; }
+  .benevity h3 { margin: 0 0 16px; font-size: 22px; font-weight: 900; color: var(--green); }
+  .benevity ol { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 14px; font-size: 17px; line-height: 1.6; }
+  .copy-row { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-left: 6px; }
+  .benevity code { font-family: inherit; font-weight: 700; background: var(--ground); border: 1px solid var(--line); padding: 4px 10px; border-radius: 8px; }
+  .copy {
+    font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; min-height: 36px;
+    border: 1.5px solid var(--green); color: var(--green); background: transparent; border-radius: 999px; padding: 4px 14px;
+  }
+  .copy:hover { background: var(--green); color: var(--ground); }
+  .other { display: inline-block; margin-top: 22px; font-weight: 700; }
+
+  .join {
+    background: var(--lemon); border-radius: 28px; padding: clamp(28px, 5vw, 56px); margin-bottom: 80px;
+    display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: space-between;
+  }
+  .join-text { flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+  .join h2 { margin: 0; font-size: clamp(36px, 5vw, 48px); }
+  .join p { margin: 0; font-size: 18px; line-height: 1.7; color: #3a3a1c; }
+  .join p.small { font-size: 14px; }
+  .join a:not(.btn) { color: var(--ink); }
+  .qr { width: 180px; height: 180px; background: #fff; border-radius: 16px; padding: 10px; object-fit: contain; }
+</style>

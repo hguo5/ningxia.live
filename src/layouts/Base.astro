@@ -1,31 +1,41 @@
 ---
 import { u, abs } from '../lib/url';
 import { site } from '../site.config';
+import { t as T, lp, type Lang } from '../i18n';
 
 interface Props {
+  lang: Lang;
+  path: string; // language-neutral path of this page, e.g. "/" or "/events/09/"
   title?: string;
   description?: string;
   image?: string;
 }
 
-const { title, description = `${site.name} · ${site.tagline}。${site.golive.nameZh}（${site.golive.name}）旗下的音乐品牌：现场音乐、开放麦、卡拉OK。`, image = '/img/brand-poster.jpg' } = Astro.props;
-const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
-const imageUrl = abs(image);
-const base = import.meta.env.BASE_URL;
+const { lang, path, title, description, image = '/img/brand-poster.jpg' } = Astro.props;
+const s = T[lang];
+const other: Lang = lang === 'zh' ? 'en' : 'zh';
+const fullTitle = title ? `${title} · ${s.siteName}` : s.homeTitle;
+const desc = description ?? s.description;
+const home = lp(lang, '/');
 ---
 <!doctype html>
-<html lang="zh-CN">
+<html lang={s.htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={desc} />
     <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={imageUrl} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:image" content={abs(image)} />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
+    <link rel="canonical" href={new URL(lp(lang, path), import.meta.env.SITE).href} />
+    <link rel="alternate" hreflang="zh-CN" href={new URL(lp('zh', path), import.meta.env.SITE).href} />
+    <link rel="alternate" hreflang="en" href={new URL(lp('en', path), import.meta.env.SITE).href} />
+    <link rel="alternate" hreflang="x-default" href={new URL(lp('zh', path), import.meta.env.SITE).href} />
     <link rel="icon" href={u('/img/logo.png')} />
-    <link rel="alternate" type="text/calendar" title="柠下乐会活动日历" href={u('/calendar.ics')} />
+    <link rel="alternate" type="text/calendar" title={s.subscribeCal} href={u('/calendar.ics')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" />
@@ -33,19 +43,21 @@ const base = import.meta.env.BASE_URL;
   <body>
     <header class="wrap nav">
       <div class="brand-wrap">
-        <a href={base} class="brand" aria-label={`${site.name} 首页`}>
-          <img src={u('/img/logo.png')} alt={`${site.name} Live Music & Karaoke`} width="120" height="46" />
+        <a href={home} class="brand" aria-label={`${s.siteName} ${s.nav.home}`}>
+          <img src={u('/img/logo.png')} alt={`${s.siteName} Live Music & Karaoke`} width="120" height="46" />
         </a>
         <a href={site.golive.url} class="parent">
-          <span class="parent-zh">{site.golive.nameZh}旗下品牌</span>
-          <span class="parent-en">A brand of {site.golive.name}</span>
+          <span class="parent-zh">{lang === 'zh' ? s.parentZh : s.parentEn}</span>
+          <span class="parent-en">{lang === 'zh' ? s.parentEn : s.parentZh}</span>
         </a>
       </div>
-      <nav aria-label="主导航">
-        <a href={u('/#next')}>下一场</a>
-        <a href={u('/#past')}>往期活动</a>
-        <a href={u('/#about')}>关于</a>
-        <a href={u('/#join')} class="pill">加入我们</a>
+      <nav aria-label={s.mainNav}>
+        <a href={`${home}#next`}>{s.nav.next}</a>
+        <a href={`${home}#past`}>{s.nav.past}</a>
+        <a href={`${home}#about`}>{s.nav.about}</a>
+        <a href={`${home}#support`}>{s.nav.support}</a>
+        <a href={`${home}#join`} class="pill">{s.nav.join}</a>
+        <a href={lp(other, path)} class="lang" hreflang={T[other].htmlLang} lang={T[other].htmlLang} aria-label={s.switchAria}>{s.switchLabel}</a>
       </nav>
     </header>
 
@@ -54,8 +66,8 @@ const base = import.meta.env.BASE_URL;
     </main>
 
     <footer class="footer">
-      <p>{site.name} Live Music &amp; Karaoke 是 <a href={site.golive.url}>{site.golive.nameZh}（{site.golive.name}）</a>旗下的音乐品牌。</p>
-      <p>GoLive 是一个 501(c)(3) 非营利组织 · <a href={site.golive.url}>golive.music</a>{site.golive.donateUrl && <> · <a href={site.golive.donateUrl}>捐款支持</a></>}</p>
+      <p>{s.footerPre}<a href={site.golive.url}>{s.footerGoLive}</a>{s.footerPost}</p>
+      <p>{s.footer2} · <a href={site.golive.url}>golive.music</a>{site.golive.donateUrl && <> · <a href={site.golive.donateUrl}>{s.donate}</a></>}</p>
     </footer>
 
     <style is:global>
@@ -125,6 +137,9 @@ const base = import.meta.env.BASE_URL;
       .parent:hover { color: var(--green); }
       .parent-zh { font-size: 13px; font-weight: 700; }
       .parent-en { font-size: 11px; letter-spacing: 0.02em; }
+      .nav nav a.lang { border: 1.5px solid var(--green); color: var(--green); padding: 8px 14px; border-radius: 999px; font-weight: 700; font-size: 14px; }
+      .nav nav a.lang:hover { background: var(--green); color: var(--ground); }
+      html[lang="en"] .display { letter-spacing: 0.01em; }
     </style>
   </body>
 </html>

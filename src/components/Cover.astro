@@ -1,22 +1,25 @@
 ---
-import { u, abs } from '../lib/url';
-import type { SiteEvent } from '../lib/events';
+import { u } from '../lib/url';
+import { view, type SiteEvent } from '../lib/events';
+import { t, type Lang } from '../i18n';
 
 interface Props {
   event: SiteEvent;
+  lang: Lang;
   class?: string;
   eager?: boolean;
 }
 
-const { event, class: cls = '', eager = false } = Astro.props;
-const alt = `${event.code} ${event.title} ${event.coverShape === 'landscape' ? '现场照片' : '海报'}`;
+const { event, lang, class: cls = '', eager = false } = Astro.props;
+const v = view(event, lang);
+const alt = `${v.code} ${v.title} ${event.coverShape === 'landscape' ? t[lang].photoWord : t[lang].posterWord}`;
 ---
 {event.cover ? (
   <img src={u(event.cover)} alt={alt} class={`cover ${cls}`} loading={eager ? 'eager' : 'lazy'} />
 ) : (
-  <div class={`cover cover-fallback ${cls}`} role="img" aria-label={`${event.code} ${event.title}`}>
-    <span class="display">{event.title}</span>
-    <span class="cover-code">{event.code}</span>
+  <div class={`cover cover-fallback ${cls}`} role="img" aria-label={`${v.code} ${v.title}`}>
+    <span class="display">{v.title}</span>
+    <span class="cover-code">{v.code}</span>
   </div>
 )}
 
