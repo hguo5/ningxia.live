@@ -1,4 +1,5 @@
 ---
+import { u, abs } from '../lib/url';
 import { site } from '../site.config';
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 
 const { title, description = `${site.name} · ${site.tagline}。现场音乐、开放麦、卡拉OK。`, image = '/img/brand-poster.jpg' } = Astro.props;
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
-const imageUrl = new URL(image, Astro.site).href;
+const imageUrl = abs(image);
 const base = import.meta.env.BASE_URL;
 ---
 <!doctype html>
@@ -23,8 +24,8 @@ const base = import.meta.env.BASE_URL;
     <meta property="og:description" content={description} />
     <meta property="og:image" content={imageUrl} />
     <meta property="og:type" content="website" />
-    <link rel="icon" href="/img/logo.png" />
-    <link rel="alternate" type="text/calendar" title="柠下乐会活动日历" href="/calendar.ics" />
+    <link rel="icon" href={u('/img/logo.png')} />
+    <link rel="alternate" type="text/calendar" title="柠下乐会活动日历" href={u('/calendar.ics')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" />
@@ -32,13 +33,13 @@ const base = import.meta.env.BASE_URL;
   <body>
     <header class="wrap nav">
       <a href={base} class="brand" aria-label={`${site.name} 首页`}>
-        <img src="/img/logo.png" alt={`${site.name} Live Music & Karaoke`} width="120" height="46" />
+        <img src={u('/img/logo.png')} alt={`${site.name} Live Music & Karaoke`} width="120" height="46" />
       </a>
       <nav aria-label="主导航">
-        <a href="/#next">下一场</a>
-        <a href="/#past">往期活动</a>
-        <a href="/#about">关于</a>
-        <a href="/#join" class="pill">加入我们</a>
+        <a href={u('/#next')}>下一场</a>
+        <a href={u('/#past')}>往期活动</a>
+        <a href={u('/#about')}>关于</a>
+        <a href={u('/#join')} class="pill">加入我们</a>
       </nav>
     </header>
 
@@ -47,7 +48,7 @@ const base = import.meta.env.BASE_URL;
     </main>
 
     <footer class="footer">
-      <p>{site.domain} · {site.name} Live Music &amp; Karaoke · <a href={site.golive.url}>GoLive Musicians League</a></p>
+      <p>{site.domain} · {site.name} Live Music &amp; Karaoke · <a href={u(site.golive.url)}>GoLive Musicians League</a></p>
     </footer>
 
     <style is:global>

@@ -1,4 +1,5 @@
 ---
+import { u, abs } from '../../lib/url';
 import Base from '../../layouts/Base.astro';
 import Cover from '../../components/Cover.astro';
 import { events, longDate, timeRange, type SiteEvent } from '../../lib/events';
@@ -26,7 +27,7 @@ const landscape = e.coverShape === 'landscape';
   <section class={`wrap head ${landscape ? 'head-wide' : ''}`}>
     <div class="cover-col"><Cover event={e} class={landscape ? 'wide' : 'tall'} eager /></div>
     <div class="info">
-      <a href="/#past" class="back">← 往期活动</a>
+      <a href={u('/#past')} class="back">← 往期活动</a>
       <span class={`badge ${e.upcoming ? 'badge-next' : ''}`}>{e.code} · {e.upcoming ? '即将举行' : '已结束'}</span>
       <h1 class="display">{e.title}</h1>
       {e.subtitle && <p class="subtitle">{e.subtitle}</p>}
@@ -35,7 +36,7 @@ const landscape = e.coverShape === 'landscape';
         <dt>时间</dt><dd>{longDate(e.date)}{time && ` ${time}`}</dd>
         {e.place && <><dt>地点</dt><dd>{e.place}</dd></>}
         {e.price && <><dt>费用</dt><dd>{e.price}</dd></>}
-        {e.signup && <><dt>报名</dt><dd>{e.signupUrl ? <a href={e.signupUrl}>{e.signup}</a> : e.signup}</dd></>}
+        {e.signup && <><dt>报名</dt><dd>{e.signupUrl ? <a href={u(e.signupUrl)}>{e.signup}</a> : e.signup}</dd></>}
       </dl>
 
       {e.hasBody && <div class="body"><Content /></div>}
@@ -47,10 +48,10 @@ const landscape = e.coverShape === 'landscape';
       <div class="wrap">
         <div class="section-head">
           <h2 class="display">现场照片</h2>
-          {e.album && <a href={e.album}>完整相册 →</a>}
+          {e.album && <a href={u(e.album)}>完整相册 →</a>}
         </div>
         <ul class="photos">
-          {e.photos.map((p, i) => <li><img src={p} alt={`${e.code} 现场照片 ${i + 1}`} loading="lazy" /></li>)}
+          {e.photos.map((p, i) => <li><img src={u(p)} alt={`${e.code} 现场照片 ${i + 1}`} loading="lazy" /></li>)}
         </ul>
       </div>
     </section>
@@ -60,7 +61,7 @@ const landscape = e.coverShape === 'landscape';
       <div class="wrap">
         <div class="section-head">
           <h2 class="display">现场照片</h2>
-          {e.album && <a href={e.album}>查看现场相册 →</a>}
+          {e.album && <a href={u(e.album)}>查看现场相册 →</a>}
         </div>
         <p class="no-photos">现场照片整理中，敬请期待。</p>
       </div>
@@ -90,18 +91,18 @@ const landscape = e.coverShape === 'landscape';
 
   <nav class="wrap prevnext" aria-label="上一场和下一场">
     {older ? (
-      <a href={`/events/${older.slug}/`} class="pn">
+      <a href={u(`/events/${older.slug}/`)} class="pn">
         <span class="pn-label">← 上一场 · {older.code}</span>
         <span class="pn-title">{older.title}</span>
       </a>
     ) : <span></span>}
     {newer ? (
-      <a href={`/events/${newer.slug}/`} class="pn pn-next">
+      <a href={u(`/events/${newer.slug}/`)} class="pn pn-next">
         <span class="pn-label">下一场 · {newer.code} →</span>
         <span class="pn-title">{newer.title}</span>
       </a>
     ) : (
-      <a href="/#join" class="pn pn-next">
+      <a href={u('/#join')} class="pn pn-next">
         <span class="pn-label">下一场 →</span>
         <span class="pn-title">即将公布 · 订阅通知</span>
       </a>

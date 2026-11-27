@@ -2,6 +2,7 @@
 import type { APIRoute } from 'astro';
 import { events } from '../lib/events';
 import { site } from '../site.config';
+import { abs } from '../lib/url';
 
 const esc = (s: string) => s.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
 
@@ -44,7 +45,7 @@ export const GET: APIRoute = () => {
   ];
 
   for (const e of events) {
-    const url = new URL(`/events/${e.slug}/`, `https://${site.domain}`).href;
+    const url = abs(`/events/${e.slug}/`);
     lines.push('BEGIN:VEVENT', `UID:ningxia-${e.slug}@${site.domain}`, `DTSTAMP:${stamp}`);
     if (e.time) {
       lines.push(`DTSTART;TZID=America/Los_Angeles:${addHours(e.date, e.time, 0)}`);

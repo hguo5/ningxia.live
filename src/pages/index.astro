@@ -1,10 +1,14 @@
 ---
+import { u, abs } from '../lib/url';
 import Base from '../layouts/Base.astro';
 import Cover from '../components/Cover.astro';
 import { site } from '../site.config';
 import { events, upcoming, past, dotDate, longDate, timeRange } from '../lib/events';
 
 const next = upcoming[0];
+const calUrl = abs('/calendar.ics');
+const webcal = calUrl.replace(/^https?:/, 'webcal:');
+const calDisplay = calUrl.replace(/^https?:\/\//, '');
 const heroEvent = next ?? past[0];
 ---
 <Base>
@@ -24,7 +28,7 @@ const heroEvent = next ?? past[0];
               {longDate(next.date)}{timeRange(next) && ` ${timeRange(next)}`}{next.place && ` · ${next.place}`}
             </span>
           </div>
-          <a class="btn btn-lemon" href={`/events/${next.slug}/`}>查看详情</a>
+          <a class="btn btn-lemon" href={u(`/events/${next.slug}/`)}>查看详情</a>
         </div>
       ) : (
         <div class="next-card">
@@ -39,7 +43,7 @@ const heroEvent = next ?? past[0];
     </div>
 
     {heroEvent && (
-      <a class="hero-figure" href={`/events/${heroEvent.slug}/`}>
+      <a class="hero-figure" href={u(`/events/${heroEvent.slug}/`)}>
         <Cover event={heroEvent} class="hero-cover" eager />
         <span class="caption">{next ? '下一场' : '上一场'} · {heroEvent.code} {heroEvent.title} · {dotDate(heroEvent.date)}</span>
       </a>
@@ -56,7 +60,7 @@ const heroEvent = next ?? past[0];
       <ul class="grid">
         {past.map((e) => (
           <li>
-            <a href={`/events/${e.slug}/`} class="card">
+            <a href={u(`/events/${e.slug}/`)} class="card">
               <Cover event={e} />
               <span class="card-code">{e.code} · {dotDate(e.date)}</span>
               <span class="card-title">{e.title}</span>
@@ -64,7 +68,7 @@ const heroEvent = next ?? past[0];
               {e.place && <span class="card-sub">{e.place}</span>}
               {e.photos && e.photos.length > 0 ? (
                 <span class="strip">
-                  {e.photos.slice(0, 3).map((p) => <img src={p} alt="" loading="lazy" />)}
+                  {e.photos.slice(0, 3).map((p) => <img src={u(p)} alt="" loading="lazy" />)}
                 </span>
               ) : (
                 <span class="no-photos">现场照片整理中</span>
@@ -79,27 +83,27 @@ const heroEvent = next ?? past[0];
 
   <!-- About the brand -->
   <section id="about" class="wrap about">
-    <img src="/img/brand-poster.jpg" alt="柠下乐会品牌海报：柠檬树下的音乐派对" class="brand-poster" loading="lazy" />
+    <img src={u('/img/brand-poster.jpg')} alt="柠下乐会品牌海报：柠檬树下的音乐派对" class="brand-poster" loading="lazy" />
     <div class="about-text">
       <p class="eyebrow">关于柠下乐会</p>
       <h2 class="display">{site.tagline}</h2>
       <p>柠下乐会是 GoLive 旗下的一个音乐品牌：现场音乐、卡拉OK、开放麦。GoLive 音乐人联盟是一个 501(c)(3) 非营利公益组织，欢迎个人和企业赞助。</p>
       <div class="actions">
-        {site.golive.donateUrl && <a class="btn btn-green" href={site.golive.donateUrl}>支持我们</a>}
-        <a class="btn btn-outline" href={site.golive.url}>golive.music →</a>
+        {site.golive.donateUrl && <a class="btn btn-green" href={u(site.golive.donateUrl)}>支持我们</a>}
+        <a class="btn btn-outline" href={u(site.golive.url)}>golive.music →</a>
       </div>
     </div>
   </section>
 
   <!-- Organizer -->
   <section class="wrap organizer">
-    {site.organizer.photo && <img src={site.organizer.photo} alt={site.organizer.name} class="avatar" loading="lazy" />}
+    {site.organizer.photo && <img src={u(site.organizer.photo)} alt={site.organizer.name} class="avatar" loading="lazy" />}
     <div class="about-text">
       <p class="eyebrow">主理人</p>
       <h2 class="name">{site.organizer.name}</h2>
       <p>{site.organizer.bio}</p>
       <div class="links">
-        {site.organizer.links.map((l) => <a href={l.href}>{l.label} →</a>)}
+        {site.organizer.links.map((l) => <a href={u(l.href)}>{l.label} →</a>)}
       </div>
     </div>
   </section>
@@ -111,12 +115,12 @@ const heroEvent = next ?? past[0];
         <h2 class="display">别错过下一场</h2>
         <p>把柠下乐会的活动日历加到你的手机上，新活动会自动出现。{site.subscribe.wechatQr && '也可以扫码进微信群。'}</p>
         <div class="actions">
-          <a class="btn btn-dark" href={`webcal://${site.domain}/calendar.ics`}>订阅活动日历</a>
-          {site.subscribe.email && <a class="btn btn-white" href={site.subscribe.email}>邮件提醒</a>}
+          <a class="btn btn-dark" href={webcal}>订阅活动日历</a>
+          {site.subscribe.email && <a class="btn btn-white" href={u(site.subscribe.email)}>邮件提醒</a>}
         </div>
-        <p class="small">也可以 <a href="/calendar.ics">下载日历文件</a>，或在 Google 日历里用这个网址添加：{site.domain}/calendar.ics</p>
+        <p class="small">也可以 <a href={u('/calendar.ics')}>下载日历文件</a>，或在 Google 日历里用这个网址添加：{calDisplay}</p>
       </div>
-      {site.subscribe.wechatQr && <img src={site.subscribe.wechatQr} alt="柠下乐会微信群二维码" class="qr" />}
+      {site.subscribe.wechatQr && <img src={u(site.subscribe.wechatQr)} alt="柠下乐会微信群二维码" class="qr" />}
     </div>
   </section>
 </Base>

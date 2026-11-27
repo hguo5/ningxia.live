@@ -28,6 +28,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        env:
+          # Change these repo variables (Settings → Secrets and variables → Actions → Variables)
+          # to https://ningxia.live and / once the domain is connected.
+          SITE_URL: ${{ vars.SITE_URL || 'https://hguo5.github.io' }}
+          BASE_PATH: ${{ vars.BASE_PATH || '/ningxia.live' }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

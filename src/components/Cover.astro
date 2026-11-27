@@ -1,4 +1,5 @@
 ---
+import { u, abs } from '../lib/url';
 import type { SiteEvent } from '../lib/events';
 
 interface Props {
@@ -11,7 +12,7 @@ const { event, class: cls = '', eager = false } = Astro.props;
 const alt = `${event.code} ${event.title} ${event.coverShape === 'landscape' ? '现场照片' : '海报'}`;
 ---
 {event.cover ? (
-  <img src={event.cover} alt={alt} class={`cover ${cls}`} loading={eager ? 'eager' : 'lazy'} />
+  <img src={u(event.cover)} alt={alt} class={`cover ${cls}`} loading={eager ? 'eager' : 'lazy'} />
 ) : (
   <div class={`cover cover-fallback ${cls}`} role="img" aria-label={`${event.code} ${event.title}`}>
     <span class="display">{event.title}</span>
