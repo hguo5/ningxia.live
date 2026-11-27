@@ -27,6 +27,13 @@ export const site = {
     donateUrl: 'https://golive.music/donate' as string | null,
   },
 
+  // Tips go to the Ningxia Live Venmo Business profile (not tax-deductible, separate from GoLive).
+  tips: {
+    venmoHandle: 'ningxialive',
+    venmoUrl: 'https://venmo.com/u/ningxialive',
+    venmoQr: '/img/venmo-qr.jpg' as string | null,
+  },
+
   subscribe: {
     // MailerLite embedded form (Forms → Embedded forms). Set to null to hide the email signup.
     mailerlite: { account: '2828632', form: '205281810674878463' } as { account: string; form: string } | null,

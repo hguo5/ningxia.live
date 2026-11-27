@@ -151,6 +151,24 @@ const pastCount = site.showEarlyEventsNote ? past.length + 3 : past.length;
     </div>
   </section>
 
+  <!-- Tips (Ningxia Live's own Venmo Business; separate from GoLive's tax-deductible giving) -->
+  {site.tips.venmoHandle && (
+    <section id="tip" class="wrap">
+      <div class="tip">
+        <div class="tip-text">
+          <p class="eyebrow">{s.tipEyebrow}</p>
+          <h2 class="display">{s.tipTitle}</h2>
+          <p>{s.tipP}</p>
+          <p class="tip-handle">{s.tipScan} <strong>@{site.tips.venmoHandle}</strong></p>
+          <div class="actions">
+            <a class="btn btn-venmo" href={site.tips.venmoUrl}>{s.tipOpen}</a>
+          </div>
+        </div>
+        {site.tips.venmoQr && <img src={u(site.tips.venmoQr)} alt={s.tipQrAlt} class="tip-qr" loading="lazy" />}
+      </div>
+    </section>
+  )}
+
   <!-- Join -->
   <section id="join" class="wrap">
     <div class="join">
@@ -304,6 +322,18 @@ const pastCount = site.showEarlyEventsNote ? past.length + 3 : past.length;
   }
   .copy:hover { background: var(--green); color: var(--ground); }
   .other { display: inline-block; margin-top: 22px; font-weight: 700; }
+
+  .tip {
+    background: var(--paper); border: 2px solid var(--line); border-radius: 28px; padding: clamp(28px, 5vw, 48px); margin-bottom: 40px;
+    display: flex; flex-wrap: wrap; gap: 36px; align-items: center; justify-content: space-between;
+  }
+  .tip-text { flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+  .tip h2 { margin: 0; font-size: clamp(30px, 4vw, 40px); color: var(--green); }
+  .tip-text p:not(.eyebrow) { margin: 0; font-size: 17px; line-height: 1.75; color: var(--muted); }
+  .tip-text p.tip-handle { color: var(--ink); }
+  .btn-venmo { background: #008cff; color: #fff; }
+  .btn-venmo:hover { background: #0074d4; color: #fff; }
+  .tip-qr { width: 220px; max-width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--line); }
 
   .join {
     background: var(--lemon); border-radius: 28px; padding: clamp(28px, 5vw, 56px); margin-bottom: 80px;
