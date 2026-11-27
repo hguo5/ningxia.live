@@ -1,0 +1,13 @@
+---
+// Renders text with every mention of GoLive's name linked to golive.music.
+import { site } from '../site.config';
+
+interface Props {
+  text: string;
+}
+
+const NAMES = ['GoLive Musician’s League', 'GoLive 音乐人联盟'];
+const pattern = new RegExp(`(${NAMES.map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
+const parts = Astro.props.text.split(pattern);
+---
+{parts.map((p) => (NAMES.includes(p) ? <a href={site.golive.url} class="golive-link">{p}</a> : p))}
