@@ -67,6 +67,7 @@ const home = lp(lang, '/');
 
     <footer class="footer">
       <p>{s.footerPre}<a href={site.golive.url}>{s.footerGoLive}</a>{s.footerPost}</p>
+      <p>{s.contact}: <a href={`mailto:${site.email}`}>{site.email}</a></p>
       <p>{s.footer2} · <a href={site.golive.url}>golive.music</a>{site.golive.donateUrl && <> · <a href={site.golive.donateUrl}>{s.donate}</a></>}</p>
     </footer>
 

@@ -79,6 +79,8 @@ export const t = {
     footerGoLive: 'GoLive 音乐人联盟（GoLive Musician’s League）',
     footer2: 'GoLive 是一个 501(c)(3) 非营利组织',
     donate: '捐款支持',
+    contact: '联系我们',
+    contactP: '有问题、想表演或想合作？写信给我们：',
 
     // event page
     backToPast: '← 往期活动',
@@ -172,6 +174,8 @@ export const t = {
     footerGoLive: 'GoLive Musician’s League (GoLive 音乐人联盟)',
     footer2: 'GoLive is a 501(c)(3) nonprofit',
     donate: 'Donate',
+    contact: 'Contact',
+    contactP: 'Questions, want to perform, or want to collaborate? Email us:',
 
     backToPast: '← Past events',
     upcomingBadge: 'Upcoming',

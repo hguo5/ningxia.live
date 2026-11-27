@@ -160,6 +160,7 @@ const pastCount = site.showEarlyEventsNote ? past.length + 3 : past.length;
           <a class="btn btn-dark" href={webcal}>{s.subscribeCal}</a>
           {site.subscribe.email && <a class="btn btn-white" href={u(site.subscribe.email)}>{s.emailAlerts}</a>}
         </div>
+        <p class="contact">{s.contactP} <a href={`mailto:${site.email}`}>{site.email}</a></p>
         <p class="small">{s.calSmall[0]} <a href={u('/calendar.ics')}>{s.calSmall[1]}</a>{s.calSmall[2]}{calDisplay}</p>
       </div>
       {site.subscribe.wechatQr && <img src={u(site.subscribe.wechatQr)} alt={s.wechatAlt} class="qr" />}
@@ -260,6 +261,7 @@ const pastCount = site.showEarlyEventsNote ? past.length + 3 : past.length;
   .join h2 { margin: 0; font-size: clamp(36px, 5vw, 48px); }
   .join p { margin: 0; font-size: 18px; line-height: 1.7; color: #3a3a1c; }
   .join p.small { font-size: 14px; }
+  .join p.contact a { font-weight: 700; }
   .join a:not(.btn) { color: var(--ink); }
   .qr { width: 180px; height: 180px; background: #fff; border-radius: 16px; padding: 10px; object-fit: contain; }
 </style>

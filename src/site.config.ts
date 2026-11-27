@@ -3,6 +3,7 @@ export const site = {
   name: '柠下乐会',
   tagline: '柠檬树下的音乐派对',
   domain: 'ningxia.live',
+  email: 'hi@ningxia.live',
 
   organizer: {
     name: '郭辉 Hui Guo',
