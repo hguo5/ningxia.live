@@ -41,7 +41,13 @@ const pastCount = site.showEarlyEventsNote ? past.length + 3 : past.length;
             <span class="next-title">{nv.title}</span>
             <span class="next-meta">{nv.date}{nv.time && ` ${nv.time}`} · {nv.place}</span>
           </div>
-          <a class="btn btn-lemon" href={ev(next!.slug)}>{s.details}</a>
+          <div class="next-actions">
+            {next!.ticketUrl && !next!.soldOut && (
+              <a class="btn btn-green" href={next!.ticketUrl}>{next!.ticketPrice ? `${s.buyTickets} · ${next!.ticketPrice}` : s.register}</a>
+            )}
+            {next!.soldOut && <span class="btn btn-soldout">{s.soldOut}</span>}
+            <a class="btn btn-lemon" href={ev(next!.slug)}>{s.details}</a>
+          </div>
         </div>
       ) : (
         <div class="next-card">
@@ -195,8 +201,9 @@ const pastCount = site.showEarlyEventsNote ? past.length + 3 : past.length;
             <p class="signup-msg" role="status" aria-live="polite"></p>
           </form>
         )}
-        <p>{s.joinP}{site.subscribe.wechatQr && ` ${s.joinWechat}`}</p>
+        <p>{site.subscribe.luma && `${s.lumaP} `}{s.joinP}{site.subscribe.wechatQr && ` ${s.joinWechat}`}</p>
         <div class="actions">
+          {site.subscribe.luma && <a class="btn btn-green" href={site.subscribe.luma}>{s.followLuma}</a>}
           <a class="btn btn-dark" href={webcal}>{s.subscribeCal}</a>
           {site.subscribe.email && <a class="btn btn-white" href={u(site.subscribe.email)}>{s.emailAlerts}</a>}
         </div>
@@ -264,6 +271,8 @@ const pastCount = site.showEarlyEventsNote ? past.length + 3 : past.length;
     background: var(--paper); border: 2px solid var(--green); border-radius: 20px; padding: 24px 28px;
     display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; max-width: 560px;
   }
+  .next-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn-soldout { background: var(--sand); color: var(--soft); }
   .next-info { display: flex; flex-direction: column; gap: 4px; }
   .next-label { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; color: var(--orange); }
   .next-title { font-size: 24px; font-weight: 900; }

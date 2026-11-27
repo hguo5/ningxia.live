@@ -35,6 +35,8 @@ export const site = {
   },
 
   subscribe: {
+    // Public Luma calendar: people follow it to get notified of new events and buy tickets.
+    luma: 'https://luma.com/ningxia' as string | null,
     // MailerLite embedded form (Forms → Embedded forms). Set to null to hide the email signup.
     mailerlite: { account: '2828632', form: '205281810674878463' } as { account: string; form: string } | null,
     wechatQr: null as string | null, // e.g. '/img/wechat-qr.png'

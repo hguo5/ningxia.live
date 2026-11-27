@@ -31,6 +31,9 @@ priceEn: Free           # optional
 summaryEn: English description   # optional; the Markdown body below is the Chinese one
 signup: Eventbrite      # optional
 signupUrl: https://...  # optional
+ticketUrl: https://luma.com/...   # optional: shows a 购票 / Buy tickets button (报名 / Register if no price)
+ticketPrice: "$15"     # optional
+soldOut: true           # optional: button changes to 已售罄 / Sold out
 cover: /img/events/10.jpg
 ---
 活动介绍写在这里。

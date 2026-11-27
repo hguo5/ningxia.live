@@ -17,6 +17,9 @@ export interface EventData {
   priceEn?: string;
   signup?: string; // text, e.g. "Eventbrite"
   signupUrl?: string;
+  ticketUrl?: string; // Luma / Stripe link; shows a 购票 (or 报名 if no ticketPrice) button
+  ticketPrice?: string; // e.g. "$15"
+  soldOut?: boolean;
   summaryEn?: string; // English description (the Markdown body is the Chinese one)
   cover?: string;
   coverShape?: 'portrait' | 'landscape';
