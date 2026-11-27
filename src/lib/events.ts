@@ -64,7 +64,7 @@ export const upcoming = events.filter((e) => e.upcoming).reverse(); // soonest f
 export const past = events.filter((e) => !e.upcoming); // newest first
 
 export function code(slug: string, lang: Lang): string {
-  return lang === 'en' ? `ULTimeet #${slug}` : `柠下[${slug}]`;
+  return lang === 'en' ? `Ningxia Live #${slug}` : `柠下[${slug}]`;
 }
 
 const BACKYARD = { zh: 'San Jose · 柠檬树下的后院', en: 'San Jose · our backyard under the lemon tree' };
