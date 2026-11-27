@@ -17,7 +17,7 @@ const heroEvent = next ?? past[0];
     <div class="hero-text">
       <p class="eyebrow">LIVE MUSIC &amp; KARAOKE · 湾区</p>
       <h1 class="display">柠檬树下的<br />音乐派对</h1>
-      <p class="lead">柠下乐会是一个属于音乐爱好者的不定期聚会：现场音乐、开放麦、卡拉OK，带上朋友和好心情就好。</p>
+      <p class="lead">柠下乐会是 <a href={site.golive.url}>{site.golive.nameZh}</a> 旗下的音乐品牌，一个属于音乐爱好者的不定期聚会：现场音乐、开放麦、卡拉OK，带上朋友和好心情就好。</p>
 
       {next ? (
         <div class="next-card">
@@ -85,12 +85,13 @@ const heroEvent = next ?? past[0];
   <section id="about" class="wrap about">
     <img src={u('/img/brand-poster.jpg')} alt="柠下乐会品牌海报：柠檬树下的音乐派对" class="brand-poster" loading="lazy" />
     <div class="about-text">
-      <p class="eyebrow">关于柠下乐会</p>
+      <p class="eyebrow">关于柠下乐会 · GoLive 旗下品牌</p>
       <h2 class="display">{site.tagline}</h2>
-      <p>柠下乐会是 GoLive 旗下的一个音乐品牌：现场音乐、卡拉OK、开放麦。GoLive 音乐人联盟是一个 501(c)(3) 非营利公益组织，欢迎个人和企业赞助。</p>
+      <p>柠下乐会是 <strong>{site.golive.nameZh}（{site.golive.name}）</strong>旗下的音乐品牌：现场音乐、卡拉OK、开放麦。</p>
+      <p>GoLive 是一个 501(c)(3) 非营利组织，自 2023 年起致力于推动硅谷的现场音乐文化，支持本地音乐人、Jam 和新乐队，完全由社区捐助支持。欢迎个人和企业赞助。</p>
       <div class="actions">
-        {site.golive.donateUrl && <a class="btn btn-green" href={u(site.golive.donateUrl)}>支持我们</a>}
-        <a class="btn btn-outline" href={u(site.golive.url)}>golive.music →</a>
+        {site.golive.donateUrl && <a class="btn btn-green" href={site.golive.donateUrl}>捐款支持 GoLive</a>}
+        <a class="btn btn-outline" href={site.golive.aboutUrl}>了解 GoLive →</a>
       </div>
     </div>
   </section>

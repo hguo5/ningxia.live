@@ -8,7 +8,7 @@ interface Props {
   image?: string;
 }
 
-const { title, description = `${site.name} · ${site.tagline}。现场音乐、开放麦、卡拉OK。`, image = '/img/brand-poster.jpg' } = Astro.props;
+const { title, description = `${site.name} · ${site.tagline}。${site.golive.nameZh}（${site.golive.name}）旗下的音乐品牌：现场音乐、开放麦、卡拉OK。`, image = '/img/brand-poster.jpg' } = Astro.props;
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
 const imageUrl = abs(image);
 const base = import.meta.env.BASE_URL;
@@ -32,9 +32,15 @@ const base = import.meta.env.BASE_URL;
   </head>
   <body>
     <header class="wrap nav">
-      <a href={base} class="brand" aria-label={`${site.name} 首页`}>
-        <img src={u('/img/logo.png')} alt={`${site.name} Live Music & Karaoke`} width="120" height="46" />
-      </a>
+      <div class="brand-wrap">
+        <a href={base} class="brand" aria-label={`${site.name} 首页`}>
+          <img src={u('/img/logo.png')} alt={`${site.name} Live Music & Karaoke`} width="120" height="46" />
+        </a>
+        <a href={site.golive.url} class="parent">
+          <span class="parent-zh">{site.golive.nameZh}旗下品牌</span>
+          <span class="parent-en">A brand of {site.golive.name}</span>
+        </a>
+      </div>
       <nav aria-label="主导航">
         <a href={u('/#next')}>下一场</a>
         <a href={u('/#past')}>往期活动</a>
@@ -48,7 +54,8 @@ const base = import.meta.env.BASE_URL;
     </main>
 
     <footer class="footer">
-      <p>{site.domain} · {site.name} Live Music &amp; Karaoke · <a href={u(site.golive.url)}>GoLive Musicians League</a></p>
+      <p>{site.name} Live Music &amp; Karaoke 是 <a href={site.golive.url}>{site.golive.nameZh}（{site.golive.name}）</a>旗下的音乐品牌。</p>
+      <p>GoLive 是一个 501(c)(3) 非营利组织 · <a href={site.golive.url}>golive.music</a>{site.golive.donateUrl && <> · <a href={site.golive.donateUrl}>捐款支持</a></>}</p>
     </footer>
 
     <style is:global>
@@ -109,6 +116,15 @@ const base = import.meta.env.BASE_URL;
 
       .footer { border-top: 1px solid var(--line); padding: 28px 24px; text-align: center; font-size: 14px; color: var(--soft); }
       .footer p { margin: 0; }
+      .footer p + p { margin-top: 6px; }
+      .brand-wrap { display: flex; align-items: center; gap: 14px; }
+      .parent {
+        display: flex; flex-direction: column; line-height: 1.3; text-decoration: none;
+        padding-left: 14px; border-left: 1px solid var(--line); color: var(--soft);
+      }
+      .parent:hover { color: var(--green); }
+      .parent-zh { font-size: 13px; font-weight: 700; }
+      .parent-en { font-size: 11px; letter-spacing: 0.02em; }
     </style>
   </body>
 </html>
