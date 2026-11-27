@@ -1,0 +1,170 @@
+---
+import Base from '../layouts/Base.astro';
+import Cover from '../components/Cover.astro';
+import { site } from '../site.config';
+import { events, upcoming, past, dotDate, longDate, timeRange } from '../lib/events';
+
+const next = upcoming[0];
+const heroEvent = next ?? past[0];
+---
+<Base>
+  <!-- Hero -->
+  <section id="next" class="wrap hero">
+    <div class="hero-text">
+      <p class="eyebrow">LIVE MUSIC &amp; KARAOKE · 湾区</p>
+      <h1 class="display">柠檬树下的<br />音乐派对</h1>
+      <p class="lead">柠下乐会是一个属于音乐爱好者的不定期聚会：现场音乐、开放麦、卡拉OK，带上朋友和好心情就好。</p>
+
+      {next ? (
+        <div class="next-card">
+          <div class="next-info">
+            <span class="next-label">下一场 · {next.code}</span>
+            <span class="next-title">{next.title}</span>
+            <span class="next-meta">
+              {longDate(next.date)}{timeRange(next) && ` ${timeRange(next)}`}{next.place && ` · ${next.place}`}
+            </span>
+          </div>
+          <a class="btn btn-lemon" href={`/events/${next.slug}/`}>查看详情</a>
+        </div>
+      ) : (
+        <div class="next-card">
+          <div class="next-info">
+            <span class="next-label">下一场 · 柠下[{String(events.length ? events[0].num + 1 : 1).padStart(2, '0')}]</span>
+            <span class="next-title">即将公布</span>
+            <span class="next-meta">订阅后第一时间知道</span>
+          </div>
+          <a class="btn btn-lemon" href="#join">订阅活动通知</a>
+        </div>
+      )}
+    </div>
+
+    {heroEvent && (
+      <a class="hero-figure" href={`/events/${heroEvent.slug}/`}>
+        <Cover event={heroEvent} class="hero-cover" eager />
+        <span class="caption">{next ? '下一场' : '上一场'} · {heroEvent.code} {heroEvent.title} · {dotDate(heroEvent.date)}</span>
+      </a>
+    )}
+  </section>
+
+  <!-- Past events -->
+  <section id="past" class="past">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 class="display">往期活动</h2>
+        <p>已经办了 {site.showEarlyEventsNote ? past.length + 3 : past.length} 场 · 每一场都有自己的主题</p>
+      </div>
+      <ul class="grid">
+        {past.map((e) => (
+          <li>
+            <a href={`/events/${e.slug}/`} class="card">
+              <Cover event={e} />
+              <span class="card-code">{e.code} · {dotDate(e.date)}</span>
+              <span class="card-title">{e.title}</span>
+              {e.subtitle && <span class="card-sub">{e.subtitle}</span>}
+              {e.place && <span class="card-sub">{e.place}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+      {site.showEarlyEventsNote && <p class="early">柠下[01]–[03] · 资料整理中</p>}
+    </div>
+  </section>
+
+  <!-- About the brand -->
+  <section id="about" class="wrap about">
+    <img src="/img/brand-poster.jpg" alt="柠下乐会品牌海报：柠檬树下的音乐派对" class="brand-poster" loading="lazy" />
+    <div class="about-text">
+      <p class="eyebrow">关于柠下乐会</p>
+      <h2 class="display">{site.tagline}</h2>
+      <p>柠下乐会是 GoLive 旗下的一个音乐品牌：现场音乐、卡拉OK、开放麦。GoLive 音乐人联盟是一个 501(c)(3) 非营利公益组织，欢迎个人和企业赞助。</p>
+      <div class="actions">
+        {site.golive.donateUrl && <a class="btn btn-green" href={site.golive.donateUrl}>支持我们</a>}
+        <a class="btn btn-outline" href={site.golive.url}>golive.music →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Organizer -->
+  <section class="wrap organizer">
+    {site.organizer.photo && <img src={site.organizer.photo} alt={site.organizer.name} class="avatar" loading="lazy" />}
+    <div class="about-text">
+      <p class="eyebrow">主理人</p>
+      <h2 class="name">{site.organizer.name}</h2>
+      <p>{site.organizer.bio}</p>
+      <div class="links">
+        {site.organizer.links.map((l) => <a href={l.href}>{l.label} →</a>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Join -->
+  <section id="join" class="wrap">
+    <div class="join">
+      <div class="join-text">
+        <h2 class="display">别错过下一场</h2>
+        <p>把柠下乐会的活动日历加到你的手机上，新活动会自动出现。{site.subscribe.wechatQr && '也可以扫码进微信群。'}</p>
+        <div class="actions">
+          <a class="btn btn-dark" href={`webcal://${site.domain}/calendar.ics`}>订阅活动日历</a>
+          {site.subscribe.email && <a class="btn btn-white" href={site.subscribe.email}>邮件提醒</a>}
+        </div>
+        <p class="small">也可以 <a href="/calendar.ics">下载日历文件</a>，或在 Google 日历里用这个网址添加：{site.domain}/calendar.ics</p>
+      </div>
+      {site.subscribe.wechatQr && <img src={site.subscribe.wechatQr} alt="柠下乐会微信群二维码" class="qr" />}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { display: flex; flex-wrap: wrap; gap: 56px; align-items: center; padding-top: 40px; padding-bottom: 72px; }
+  .hero-text { flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+  h1 { margin: 0; font-size: clamp(48px, 7vw, 76px); line-height: 1.1; color: var(--green); }
+  .lead { margin: 0; font-size: 19px; line-height: 1.75; color: var(--muted); max-width: 520px; }
+  .next-card {
+    background: var(--paper); border: 2px solid var(--green); border-radius: 20px; padding: 24px 28px;
+    display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; max-width: 560px;
+  }
+  .next-info { display: flex; flex-direction: column; gap: 4px; }
+  .next-label { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; color: var(--orange); }
+  .next-title { font-size: 24px; font-weight: 900; }
+  .next-meta { font-size: 15px; color: var(--soft); }
+  .hero-figure { flex: 0 1 400px; display: flex; flex-direction: column; gap: 14px; align-items: center; text-decoration: none; color: var(--soft); font-size: 14px; text-align: center; }
+  .hero-figure :global(.hero-cover) { max-width: 400px; border-radius: 16px; box-shadow: 0 24px 48px rgba(31, 42, 28, 0.22); transform: rotate(2deg); transition: transform 0.3s; }
+  .hero-figure:hover :global(.hero-cover) { transform: rotate(0deg) scale(1.01); }
+
+  .past { background: var(--green); color: var(--ground); padding: 80px 0; }
+  .section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 40px; }
+  .section-head h2 { margin: 0; font-size: clamp(40px, 5vw, 52px); }
+  .section-head p { margin: 0; font-size: 17px; color: var(--green-tint); }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 32px 28px; }
+  .card { display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: var(--ground); }
+  .card :global(.cover) { margin-bottom: 8px; transition: transform 0.2s; }
+  .card:hover :global(.cover) { transform: translateY(-4px); }
+  .card:hover { color: var(--ground); }
+  .card-code { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; color: var(--lemon); }
+  .card-title { font-size: 20px; font-weight: 700; line-height: 1.35; }
+  .card-sub { font-size: 14px; color: var(--green-tint); }
+  .early { margin: 40px 0 0; font-size: 15px; color: var(--green-tint); }
+
+  .about, .organizer { display: flex; flex-wrap: wrap; gap: 56px; align-items: center; }
+  .about { padding-top: 88px; }
+  .organizer { padding-top: 72px; padding-bottom: 88px; }
+  .brand-poster { flex: 0 1 360px; width: 360px; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 16px; box-shadow: 0 16px 36px rgba(31, 42, 28, 0.18); }
+  .avatar { flex: 0 0 200px; width: 200px; height: 200px; border-radius: 50%; object-fit: cover; }
+  .about-text { flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+  .about-text h2.display { margin: 0; font-size: clamp(36px, 5vw, 48px); color: var(--green); }
+  .about-text p:not(.eyebrow) { margin: 0; font-size: 18px; line-height: 1.8; color: var(--muted); }
+  .name { margin: 0; font-size: 36px; font-weight: 900; }
+  .links { display: flex; flex-wrap: wrap; gap: 20px; font-weight: 500; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+
+  .join {
+    background: var(--lemon); border-radius: 28px; padding: clamp(28px, 5vw, 56px); margin-bottom: 80px;
+    display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: space-between;
+  }
+  .join-text { flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+  .join h2 { margin: 0; font-size: clamp(36px, 5vw, 48px); }
+  .join p { margin: 0; font-size: 18px; line-height: 1.7; color: #3a3a1c; }
+  .join p.small { font-size: 14px; }
+  .join a:not(.btn) { color: var(--ink); }
+  .qr { width: 180px; height: 180px; background: #fff; border-radius: 16px; padding: 10px; object-fit: contain; }
+</style>

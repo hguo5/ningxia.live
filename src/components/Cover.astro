@@ -1,0 +1,31 @@
+---
+import type { SiteEvent } from '../lib/events';
+
+interface Props {
+  event: SiteEvent;
+  class?: string;
+  eager?: boolean;
+}
+
+const { event, class: cls = '', eager = false } = Astro.props;
+const alt = `${event.code} ${event.title} ${event.coverShape === 'landscape' ? '现场照片' : '海报'}`;
+---
+{event.cover ? (
+  <img src={event.cover} alt={alt} class={`cover ${cls}`} loading={eager ? 'eager' : 'lazy'} />
+) : (
+  <div class={`cover cover-fallback ${cls}`} role="img" aria-label={`${event.code} ${event.title}`}>
+    <span class="display">{event.title}</span>
+    <span class="cover-code">{event.code}</span>
+  </div>
+)}
+
+<style>
+  .cover { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 14px; }
+  .cover-fallback {
+    background: var(--lemon); color: var(--green);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    padding: 24px; text-align: center;
+  }
+  .cover-fallback .display { font-size: clamp(32px, 4vw, 44px); line-height: 1.2; }
+  .cover-code { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; }
+</style>

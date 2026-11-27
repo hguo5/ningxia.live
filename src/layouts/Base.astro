@@ -1,0 +1,113 @@
+---
+import { site } from '../site.config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const { title, description = `${site.name} · ${site.tagline}。现场音乐、开放麦、卡拉OK。`, image = '/img/brand-poster.jpg' } = Astro.props;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
+const imageUrl = new URL(image, Astro.site).href;
+const base = import.meta.env.BASE_URL;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/img/logo.png" />
+    <link rel="alternate" type="text/calendar" title="柠下乐会活动日历" href="/calendar.ics" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="wrap nav">
+      <a href={base} class="brand" aria-label={`${site.name} 首页`}>
+        <img src="/img/logo.png" alt={`${site.name} Live Music & Karaoke`} width="120" height="46" />
+      </a>
+      <nav aria-label="主导航">
+        <a href="/#next">下一场</a>
+        <a href="/#past">往期活动</a>
+        <a href="/#about">关于</a>
+        <a href="/#join" class="pill">加入我们</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <p>{site.domain} · {site.name} Live Music &amp; Karaoke · <a href={site.golive.url}>GoLive Musicians League</a></p>
+    </footer>
+
+    <style is:global>
+      :root {
+        --ground: #fbf6e8;
+        --paper: #ffffff;
+        --ink: #1f2a1c;
+        --muted: #4a5246;
+        --soft: #5a6155;
+        --line: #e3d9bd;
+        --green: #2e5b2b;
+        --green-dark: #1c3d1a;
+        --green-tint: #d8e3cf;
+        --lemon: #f2c230;
+        --orange: #b4500f;
+        --sand: #ede4cc;
+        --display: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif;
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--ground);
+        color: var(--ink);
+        font-family: 'Noto Sans SC', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      img { max-width: 100%; display: block; }
+      a { color: var(--green); }
+      a:hover { color: var(--green-dark); }
+      .wrap { max-width: 1200px; margin: 0 auto; padding-inline: 24px; }
+      .display { font-family: var(--display); font-weight: 400; }
+      .eyebrow { margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 0.12em; color: var(--orange); }
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; min-height: 48px;
+        padding: 12px 22px; border-radius: 999px; font-weight: 700; font-size: 16px; text-decoration: none;
+        border: 2px solid transparent;
+      }
+      .btn-green { background: var(--green); color: var(--ground); }
+      .btn-green:hover { background: var(--green-dark); color: var(--ground); }
+      .btn-lemon { background: var(--lemon); color: var(--ink); }
+      .btn-lemon:hover { background: #e0b11f; color: var(--ink); }
+      .btn-dark { background: var(--ink); color: var(--ground); }
+      .btn-dark:hover { background: #000; color: var(--ground); }
+      .btn-white { background: #fff; color: var(--ink); }
+      .btn-outline { border-color: var(--green); color: var(--green); }
+
+      .nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-block: 20px; }
+      .nav .brand img { height: 46px; width: auto; }
+      .nav nav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px; font-weight: 500; }
+      .nav nav a { color: var(--ink); text-decoration: none; }
+      .nav nav a:hover { color: var(--green); }
+      .nav nav a.pill { background: var(--green); color: var(--ground); padding: 10px 20px; border-radius: 999px; }
+      @media (max-width: 560px) {
+        .nav nav { gap: 8px 18px; font-size: 15px; }
+      }
+
+      .footer { border-top: 1px solid var(--line); padding: 28px 24px; text-align: center; font-size: 14px; color: var(--soft); }
+      .footer p { margin: 0; }
+    </style>
+  </body>
+</html>
