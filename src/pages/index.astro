@@ -62,6 +62,13 @@ const heroEvent = next ?? past[0];
               <span class="card-title">{e.title}</span>
               {e.subtitle && <span class="card-sub">{e.subtitle}</span>}
               {e.place && <span class="card-sub">{e.place}</span>}
+              {e.photos && e.photos.length > 0 ? (
+                <span class="strip">
+                  {e.photos.slice(0, 3).map((p) => <img src={p} alt="" loading="lazy" />)}
+                </span>
+              ) : (
+                <span class="no-photos">现场照片整理中</span>
+              )}
             </a>
           </li>
         ))}
@@ -143,6 +150,12 @@ const heroEvent = next ?? past[0];
   .card-code { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; color: var(--lemon); }
   .card-title { font-size: 20px; font-weight: 700; line-height: 1.35; }
   .card-sub { font-size: 14px; color: var(--green-tint); }
+  .strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+  .strip img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; }
+  .no-photos {
+    margin-top: 8px; padding: 12px; border: 1px dashed rgba(216, 227, 207, 0.5); border-radius: 8px;
+    font-size: 13px; color: var(--green-tint); text-align: center;
+  }
   .early { margin: 40px 0 0; font-size: 15px; color: var(--green-tint); }
 
   .about, .organizer { display: flex; flex-wrap: wrap; gap: 56px; align-items: center; }
