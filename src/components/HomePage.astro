@@ -155,6 +155,27 @@ const pastCount = site.showEarlyEventsNote ? past.length + 3 : past.length;
     <div class="join">
       <div class="join-text">
         <h2 class="display">{s.joinTitle}</h2>
+        {site.subscribe.mailerlite && (
+          <form
+            class="signup"
+            method="post"
+            target="_blank"
+            action={`https://assets.mailerlite.com/jsonp/${site.subscribe.mailerlite.account}/forms/${site.subscribe.mailerlite.form}/subscribe`}
+            data-sending={s.listSending}
+            data-ok={s.listOk}
+            data-err={s.listErr}
+          >
+            <label for="signup-email" class="signup-label">{s.listTitle}</label>
+            <p class="signup-p">{s.listP}</p>
+            <div class="signup-row">
+              <input id="signup-email" type="email" name="fields[email]" required autocomplete="email" placeholder={s.listPlaceholder} />
+              <input type="hidden" name="ml-submit" value="1" />
+              <input type="hidden" name="anticsrf" value="true" />
+              <button type="submit" class="btn btn-green">{s.listButton}</button>
+            </div>
+            <p class="signup-msg" role="status" aria-live="polite"></p>
+          </form>
+        )}
         <p>{s.joinP}{site.subscribe.wechatQr && ` ${s.joinWechat}`}</p>
         <div class="actions">
           <a class="btn btn-dark" href={webcal}>{s.subscribeCal}</a>
@@ -179,6 +200,34 @@ const pastCount = site.showEarlyEventsNote ? past.length + 3 : past.length;
         setTimeout(() => (btn.textContent = original), 1500);
       } catch {
         /* clipboard unavailable: the text is still visible to copy by hand */
+      }
+    });
+  });
+
+  // Email signup: submit to MailerLite in the background and show the result in place.
+  document.querySelectorAll<HTMLFormElement>('form.signup').forEach((form) => {
+    const msg = form.querySelector<HTMLElement>('.signup-msg')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const label = button.textContent;
+      button.disabled = true;
+      button.textContent = form.dataset.sending ?? label;
+      msg.className = 'signup-msg';
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form) });
+        const data = await res.json();
+        if (!data.success) throw new Error(JSON.stringify(data.errors ?? data));
+        msg.textContent = form.dataset.ok ?? '';
+        msg.classList.add('ok');
+        form.reset();
+      } catch (err) {
+        console.warn('Signup failed', err);
+        msg.textContent = form.dataset.err ?? '';
+        msg.classList.add('err');
+      } finally {
+        button.disabled = false;
+        button.textContent = label;
       }
     });
   });
@@ -263,5 +312,20 @@ const pastCount = site.showEarlyEventsNote ? past.length + 3 : past.length;
   .join p.small { font-size: 14px; }
   .join p.contact a { font-weight: 700; }
   .join a:not(.btn) { color: var(--ink); }
+  .signup { background: var(--paper); border-radius: 18px; padding: 22px 24px; display: flex; flex-direction: column; gap: 8px; margin-block: 4px 8px; }
+  .signup-label { font-size: 20px; font-weight: 900; color: var(--green); }
+  .join .signup-p { font-size: 15px; color: var(--soft); }
+  .signup-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+  .signup input[type='email'] {
+    flex: 1 1 220px; min-width: 0; min-height: 48px; padding: 10px 18px; font: inherit; font-size: 16px;
+    border: 2px solid var(--line); border-radius: 999px; background: var(--ground); color: var(--ink);
+  }
+  .signup input[type='email']:focus { outline: none; border-color: var(--green); }
+  .signup button { cursor: pointer; font: inherit; font-weight: 700; }
+  .signup button:disabled { opacity: 0.7; cursor: progress; }
+  .join .signup-msg { font-size: 15px; min-height: 0; }
+  .join .signup-msg:empty { display: none; }
+  .join .signup-msg.ok { color: var(--green); font-weight: 700; }
+  .join .signup-msg.err { color: #a3330c; font-weight: 700; }
   .qr { width: 180px; height: 180px; background: #fff; border-radius: 16px; padding: 10px; object-fit: contain; }
 </style>

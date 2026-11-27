@@ -28,6 +28,8 @@ export const site = {
   },
 
   subscribe: {
+    // MailerLite embedded form (Forms → Embedded forms). Set to null to hide the email signup.
+    mailerlite: { account: '2828632', form: '205281810674878463' } as { account: string; form: string } | null,
     wechatQr: null as string | null, // e.g. '/img/wechat-qr.png'
     email: null as string | null, // e.g. a newsletter signup URL
   },

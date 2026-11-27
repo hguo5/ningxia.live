@@ -80,6 +80,13 @@ export const t = {
     footer2: 'GoLive 是一个 501(c)(3) 非营利组织',
     donate: '捐款支持',
     contact: '联系我们',
+    listTitle: '邮件订阅',
+    listP: '留下邮箱，有新活动时我们会发邮件通知你。随时可以退订。',
+    listPlaceholder: '你的邮箱',
+    listButton: '订阅',
+    listSending: '提交中…',
+    listOk: '谢谢！如果收到确认邮件，请点击里面的链接完成订阅。',
+    listErr: '订阅没有成功，请检查邮箱地址后再试，或写信到 hi@ningxia.live。',
     contactP: '有问题、想表演或想合作？写信给我们：',
 
     // event page
@@ -175,6 +182,13 @@ export const t = {
     footer2: 'GoLive is a 501(c)(3) nonprofit',
     donate: 'Donate',
     contact: 'Contact',
+    listTitle: 'Email updates',
+    listP: 'Leave your email and we’ll let you know when there’s a new event. Unsubscribe anytime.',
+    listPlaceholder: 'Your email',
+    listButton: 'Subscribe',
+    listSending: 'Sending…',
+    listOk: 'Thanks! If you get a confirmation email, click the link in it to finish signing up.',
+    listErr: 'That didn’t work. Please check your email address and try again, or write to hi@ningxia.live.',
     contactP: 'Questions, want to perform, or want to collaborate? Email us:',
 
     backToPast: '← Past events',
