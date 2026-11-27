@@ -85,7 +85,7 @@ export const t = {
     listPlaceholder: '你的邮箱',
     listButton: '订阅',
     listSending: '提交中…',
-    listOk: '谢谢！如果收到确认邮件，请点击里面的链接完成订阅。',
+    listOk: '谢谢！请查收确认邮件并点击链接完成订阅。如果没看到，请检查垃圾邮件（Junk/Spam）文件夹。',
     listErr: '订阅没有成功，请检查邮箱地址后再试，或写信到 hi@ningxia.live。',
     contactP: '有问题、想表演或想合作？写信给我们：',
 
@@ -187,7 +187,7 @@ export const t = {
     listPlaceholder: 'Your email',
     listButton: 'Subscribe',
     listSending: 'Sending…',
-    listOk: 'Thanks! If you get a confirmation email, click the link in it to finish signing up.',
+    listOk: 'Thanks! Please check your inbox for a confirmation email and click the link to finish signing up. If you don\'t see it, check your Junk/Spam folder.',
     listErr: 'That didn’t work. Please check your email address and try again, or write to hi@ningxia.live.',
     contactP: 'Questions, want to perform, or want to collaborate? Email us:',
 
